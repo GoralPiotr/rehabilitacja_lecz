@@ -67,7 +67,7 @@ rollback
 		Select 'B³¹d. Pacjent nie zosta³ dodany' as komunikat
 	   declare @id as int
            set @id = (
-						select max(Id_pacjenta) 
+						select isnull(max(Id_pacjenta),0)
 		                  from dbo.Pacjenci
 					  )
 dbcc checkident('Pacjenci',reseed,@id)
