@@ -1,0 +1,55 @@
+Samodzielnie stworzony projekt bazy danych, który powstał na bazie własnych doświadczeń, 
+gdy musiałem oczekiwać ponad 2 godziny na rejestracje na zabiegi medyczne w jednej z placówek rehabilitacyjnych. Za sprawą odpowiednich obiektów bazodanowych czas oczekiwania został skrócony do ułamków sekund i większość procesów rejestracyjnych odbywa się automatycznie, w tle likwidując „wąskie gardło” oczekiwania na zapis. Projekt, przez moją osobę, jest cały czas rozwijany, gdzie staram się dokładać nowe funkcjonalności oraz zoptymalizować proces. 
+Za sprawą odpowiednich procedur użytkownik jest wstanie wykonać szereg czynności dla pacjenta. 
+Opis najważniejszych procedur:
+
+Dodanie pacjenta do bazy danych 
+exec dodaj_pacjenta
+@imię = 'Łukasz',
+@nazwisko = 'Katabas',
+@pesel = '700203xxxxx',
+@telefon = ‘123’,
+@email = ‘xx@xx’
+
+Za sprawą procedury zapisujemy pacjenta do lekarza. Procedura sprawdza czy skierowanie jest jeszcze aktualne, przypisuje po części ciała wizytę u odpowiedniego specjalisty. Nieobowiązkowy parametr @data pozwala określić po jakim terminie pacjent chce się udać do lekarza.
+
+exec zapis_do_lekarza
+@Nr_skier_zew = 1,
+@Data_wystawienia ='20220619',
+@Id_pacjenta = 14,
+@Nazwa_części_ciała = 'głowa',
+@Uwagi = 'brak',
+@data ='20220715'
+
+Za sprawą poniższej procedury sprawdzamy jacy pacjenci mają wizytę u wskazanego specjalisty wskazanego dnia:
+exec pacjenci_dziś
+@dzień = ‘20220629’
+@id_pracownika = 1
+Poprzez procedurę pracownik może sprawdzić informację o pacjencie:
+exec pokaz_pacjenta
+@id_pacjenta = 8
+
+Za pośrednictwem procedury dedykowany pracownik może dodać zabiegi pacjentowi.
+
+exec dodaj_zabiegi
+@id_pacjenta = 8,
+@id_pracownika =4,
+@zabieg1 = 'palce stopy,krioterapi,L,S93',
+@zabieg2 = 'palce stopy,tens,L,S93',
+@zabieg3 = 'palce stopy,Sala gim,L,S93',
+@zabieg4 = 'palce stopy,Magneto,L,S93',
+@zabieg5 = 'palce stopy,laser,L,S93'
+
+Fizjoterapeuta za pośrednictwem tej procedury wystawia zlecenie dla pacjenta, termin rozpoczęcia zabiegów wraz z kolejnymi wizytami kontrolnymi.
+
+exec dodaj_zlecenie
+@id_pacjenta = 8,
+@id_pracownika =4,
+@nazwa_grupy = 'rano'
+
+
+Procedura pozwala na dodanie nowych zabiegów, dodanych przez fizjoterapeutę. 
+
+exec uzupełnij_zabiegi
+@id_pacjenta = 3
+@zabieg1 = 'Stęp,krioterapi,S,S93'
